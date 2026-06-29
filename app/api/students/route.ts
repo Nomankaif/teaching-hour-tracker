@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const db = await getDb();
@@ -16,7 +18,8 @@ export async function GET() {
         _id: student._id.toString()
       }))
     );
-  } catch {
+  } catch (error) {
+    console.error("GET /api/students error:", error);
     return NextResponse.json({ error: "Could not load students." }, { status: 500 });
   }
 }
@@ -42,7 +45,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ _id: result.insertedId.toString() }, { status: 201 });
-  } catch {
+  } catch (error) {
+    console.error("POST /api/students error:", error);
     return NextResponse.json({ error: "Could not create student." }, { status: 500 });
   }
 }

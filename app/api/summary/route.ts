@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { endOfMonth, endOfWeek, startOfMonth, startOfWeek, toDateInputValue } from "@/lib/dates";
 import { getDb } from "@/lib/mongodb";
 
+export const dynamic = "force-dynamic";
+
 type EntryDoc = {
   studentId: string;
   studentName: string;
@@ -64,7 +66,8 @@ export async function GET() {
       weeklyRows: buildRows(weekEntries),
       monthlyRows: buildRows(entries)
     });
-  } catch {
+  } catch (error) {
+    console.error("GET /api/summary error:", error);
     return NextResponse.json({ error: "Could not load summary." }, { status: 500 });
   }
 }

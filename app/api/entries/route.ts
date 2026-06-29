@@ -19,7 +19,8 @@ export async function GET(request: Request) {
     const db = await getDb();
     const entries = await db.collection("entries").find(query).sort({ date: -1, createdAt: -1 }).toArray();
     return NextResponse.json(entries.map((entry) => ({ ...entry, _id: entry._id.toString() })));
-  } catch {
+  } catch (error) {
+    console.error("GET /api/entries error:", error);
     return NextResponse.json({ error: "Could not load entries." }, { status: 500 });
   }
 }
@@ -53,7 +54,8 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ _id: result.insertedId.toString() }, { status: 201 });
-  } catch {
+  } catch (error) {
+    console.error("POST /api/entries error:", error);
     return NextResponse.json({ error: "Could not create entry." }, { status: 500 });
   }
 }
