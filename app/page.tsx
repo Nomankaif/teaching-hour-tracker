@@ -8,11 +8,11 @@ import type { Entry, Student, Summary } from "@/lib/types";
 const emptySummary: Summary = {
   todayHours: 0,
   weekHours: 0,
-  monthHours: 0,
+  totalHours: 0,
   activeStudents: 0,
   recentEntries: [],
   weeklyRows: [],
-  monthlyRows: []
+  totalRows: []
 };
 
 type LoadState = "loading" | "ready" | "error";
@@ -129,7 +129,7 @@ export default function Home() {
               <GraduationCap className="h-7 w-7" />
               <span className="text-sm font-semibold uppercase tracking-wide">Tuition tracker</span>
             </div>
-            <h1 className="mt-2 text-3xl font-bold text-[#17211c] sm:text-4xl">Daily hours, weekly totals, monthly reports</h1>
+            <h1 className="mt-2 text-3xl font-bold text-[#17211c] sm:text-4xl">Daily hours, weekly totals, total hours</h1>
           </div>
           <button
             onClick={() => loadData()}
@@ -150,7 +150,7 @@ export default function Home() {
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
             <Metric icon={<Clock />} label="Today" value={`${summary.todayHours.toFixed(1)} h`} />
             <Metric icon={<CalendarDays />} label="This week" value={`${summary.weekHours.toFixed(1)} h`} />
-            <Metric icon={<CalendarDays />} label="This month" value={`${summary.monthHours.toFixed(1)} h`} />
+            <Metric icon={<Clock />} label="Total hours" value={`${summary.totalHours.toFixed(1)} h`} />
             <Metric icon={<Users />} label="Active students" value={String(summary.activeStudents)} />
           </div>
 
@@ -230,8 +230,8 @@ export default function Home() {
             <ReportTable rows={summary.weeklyRows} />
           </Panel>
 
-          <Panel title="Monthly Report">
-            <ReportTable rows={summary.monthlyRows} showEarnings />
+          <Panel title="Total Hours Report">
+            <ReportTable rows={summary.totalRows} showEarnings emptyText="No hours saved yet." />
           </Panel>
         </section>
 
@@ -365,12 +365,20 @@ function IconButton({ children, label, onClick }: { children: React.ReactNode; l
   );
 }
 
-function ReportTable({ rows, showEarnings = false }: { rows: Summary["weeklyRows"]; showEarnings?: boolean }) {
+function ReportTable({
+  rows,
+  showEarnings = false,
+  emptyText = "No entries for this period."
+}: {
+  rows: Summary["weeklyRows"];
+  showEarnings?: boolean;
+  emptyText?: string;
+}) {
   const totalHours = rows.reduce((sum, row) => sum + row.totalHours, 0);
   const totalEarnings = rows.reduce((sum, row) => sum + row.totalEarnings, 0);
 
   if (rows.length === 0) {
-    return <EmptyText text="No entries for this period." />;
+    return <EmptyText text={emptyText} />;
   }
 
   return (

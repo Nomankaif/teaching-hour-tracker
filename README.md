@@ -1,6 +1,6 @@
 # Tuition Hours Tracker
 
-A simple Next.js, Node.js API route, MongoDB, and Tailwind CSS app for tracking daily tuition hours and automatically viewing weekly and monthly totals.
+A simple Next.js, Node.js API route, MongoDB, and Tailwind CSS app for tracking daily tuition hours and automatically viewing weekly and total-hour reports.
 
 ## Setup
 
@@ -29,6 +29,6 @@ Open `http://localhost:3000`.
 
 - Add students with optional parent/contact details and hourly rate.
 - Enter daily tuition hours by student and date.
-- View today, current week, and current month totals.
-- See student-wise weekly and monthly reports.
-- Track estimated monthly earnings from saved hourly rates.
+- View today, current week, and all-time total hours.
+- See student-wise weekly and total-hour reports.
+- Track estimated total earnings from saved hourly rates.

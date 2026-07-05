@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Tuition Hours Tracker",
-  description: "Track daily tuition hours with weekly and monthly totals."
+  description: "Track daily tuition hours with weekly and total hour reports."
 };
 
 export default function RootLayout({

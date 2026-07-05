@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { endOfMonth, endOfWeek, startOfMonth, startOfWeek, toDateInputValue } from "@/lib/dates";
+import { endOfWeek, startOfWeek, toDateInputValue } from "@/lib/dates";
 import { getDb } from "@/lib/mongodb";
 
 export const dynamic = "force-dynamic";
@@ -44,12 +44,10 @@ export async function GET() {
     const todayValue = toDateInputValue(today);
     const weekStart = toDateInputValue(startOfWeek(today));
     const weekEnd = toDateInputValue(endOfWeek(today));
-    const monthStart = toDateInputValue(startOfMonth(today));
-    const monthEnd = toDateInputValue(endOfMonth(today));
 
     const db = await getDb();
     const [entries, recentEntries, activeStudents] = await Promise.all([
-      db.collection<EntryDoc>("entries").find({ date: { $gte: monthStart, $lte: monthEnd } }).toArray(),
+      db.collection<EntryDoc>("entries").find({}).toArray(),
       db.collection("entries").find({}).sort({ date: -1, createdAt: -1 }).limit(8).toArray(),
       db.collection("students").countDocuments({ status: "active" })
     ]);
@@ -60,11 +58,11 @@ export async function GET() {
     return NextResponse.json({
       todayHours: todayEntries.reduce((sum, entry) => sum + entry.hours, 0),
       weekHours: weekEntries.reduce((sum, entry) => sum + entry.hours, 0),
-      monthHours: entries.reduce((sum, entry) => sum + entry.hours, 0),
+      totalHours: entries.reduce((sum, entry) => sum + entry.hours, 0),
       activeStudents,
       recentEntries: recentEntries.map((entry) => ({ ...entry, _id: entry._id.toString() })),
       weeklyRows: buildRows(weekEntries),
-      monthlyRows: buildRows(entries)
+      totalRows: buildRows(entries)
     });
   } catch (error) {
     console.error("GET /api/summary error:", error);

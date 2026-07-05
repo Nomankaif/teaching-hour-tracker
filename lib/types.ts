@@ -21,11 +21,11 @@ export type Entry = {
 export type Summary = {
   todayHours: number;
   weekHours: number;
-  monthHours: number;
+  totalHours: number;
   activeStudents: number;
   recentEntries: Entry[];
   weeklyRows: ReportRow[];
-  monthlyRows: ReportRow[];
+  totalRows: ReportRow[];
 };
 
 export type ReportRow = {
